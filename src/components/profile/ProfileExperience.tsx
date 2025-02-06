@@ -65,7 +65,7 @@ const ProfileExperience = ({
           handleClick={handleOpen}
           title={
             isOwner
-              ? 'You haven’t added work experience yet'
+              ? "You haven't added work experience yet"
               : 'No Work Experience added.'
           }
           description={
@@ -79,58 +79,66 @@ const ProfileExperience = ({
 
       {experiences.length !== 0 && (
         <div className="rounded-2xl p-6 dark:bg-slate-900 bg-slate-100">
-          {experiences.map((experience) => (
-            <div key={experience.id} className="flex flex-col">
-              <div className="flex gap-3 justify-start">
-                <div className="relative w-4 flex justify-center">
-                  <div className="absolute top-0 w-2 h-2 rounded-full bg-[#3259E8]"></div>
-                  <div className="w-[2px] h-full bg-gradient-to-b from-[#3259e8] to-[#F1F5F9] dark:to-[#0F172A]"></div>
-                </div>
-                <div className="flex flex-col gap-2 mb-3 w-full">
-                  <div className="flex flex-col sm:flex-row justify-between">
-                    <div className="flex flex-col gap-1">
-                      <h2 className="dark:text-slate-50 text-[#020817] text-xl font-bold ">
-                        {experience.designation}
-                      </h2>
-                      <p className="flex gap-[4px] items-center text-sm font-medium text-slate-500 dark:text-slate-400">
-                        <span className="text-[#3259E8] text-sm font-medium">
-                          {experience.companyName}
-                        </span>
-                        <Circle width={5} height={5} fill="currentColor" />
-                        {experience.EmploymentType}
-                        <Circle width={5} height={5} fill="currentColor" />
-                        {experience.workMode}
-                      </p>
-                      <div className="px-3 py-1 bg-slate-500 bg-opacity-10 text-slate-500 dark:text-slate-400 rounded-[8px] text-sm w-fit">
-                        {formatDateRange(
-                          experience.startDate,
-                          experience.endDate
-                        )}
-                      </div>
-                    </div>
-                    {isOwner && (
-                      <div className="flex gap-3 items-center w-fit">
-                        <ExperienceDeleteDialog experienceId={experience.id} />
-                        <Button
-                          className="bg-transparent p-0 b-0 hover:bg-transparent"
-                          onClick={() => handleEditClick(experience)}
-                        >
-                          <Pencil
-                            width={16}
-                            height={16}
-                            className="dark:text-slate-400 text-slate-500"
-                          />
-                        </Button>
-                      </div>
-                    )}
+          {experiences
+            .sort((a, b) => {
+              const dateA = a.endDate ? new Date(a.endDate) : new Date();
+              const dateB = b.endDate ? new Date(b.endDate) : new Date();
+              return dateB.getTime() - dateA.getTime();
+            })
+            .map((experience) => (
+              <div key={experience.id} className="flex flex-col">
+                <div className="flex gap-3 justify-start">
+                  <div className="relative w-4 flex justify-center">
+                    <div className="absolute top-0 w-2 h-2 rounded-full bg-[#3259E8]"></div>
+                    <div className="w-[2px] h-full bg-gradient-to-b from-[#3259e8] to-[#F1F5F9] dark:to-[#0F172A]"></div>
                   </div>
-                  <p className="text-[#020817] dark:text-slate-50 text-base font-medium">
-                    {experience.description}
-                  </p>
+                  <div className="flex flex-col gap-2 mb-3 w-full">
+                    <div className="flex flex-col sm:flex-row justify-between">
+                      <div className="flex flex-col gap-1">
+                        <h2 className="dark:text-slate-50 text-[#020817] text-xl font-bold ">
+                          {experience.designation}
+                        </h2>
+                        <p className="flex gap-[4px] items-center text-sm font-medium text-slate-500 dark:text-slate-400">
+                          <span className="text-[#3259E8] text-sm font-medium">
+                            {experience.companyName}
+                          </span>
+                          <Circle width={5} height={5} fill="currentColor" />
+                          {experience.EmploymentType}
+                          <Circle width={5} height={5} fill="currentColor" />
+                          {experience.workMode}
+                        </p>
+                        <div className="px-3 py-1 bg-slate-500 bg-opacity-10 text-slate-500 dark:text-slate-400 rounded-[8px] text-sm w-fit">
+                          {formatDateRange(
+                            experience.startDate,
+                            experience.endDate
+                          )}
+                        </div>
+                      </div>
+                      {isOwner && (
+                        <div className="flex gap-3 items-center w-fit">
+                          <ExperienceDeleteDialog
+                            experienceId={experience.id}
+                          />
+                          <Button
+                            className="bg-transparent p-0 b-0 hover:bg-transparent"
+                            onClick={() => handleEditClick(experience)}
+                          >
+                            <Pencil
+                              width={16}
+                              height={16}
+                              className="dark:text-slate-400 text-slate-500"
+                            />
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-[#020817] dark:text-slate-50 text-base font-medium">
+                      {experience.description}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
 
